@@ -1,3 +1,10 @@
+#!/bin/bash
+set -e
+
+# Juste s'assurer que le kernel R est bien enregistré
+R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
+
+
 # Install Bash kernel
 # python -m bash_kernel.install --sys-prefix
 
