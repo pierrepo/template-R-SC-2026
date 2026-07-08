@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-PATH='/srv/conda/envs/notebook/bin:$PATH'
-R_HOME='/srv/conda/envs/notebook/lib/R'
+export PATH='/srv/conda/envs/notebook/bin:$PATH'
+export R_HOME='/srv/conda/envs/notebook/lib/R'
 
 # S'assurer que rserver est dans le PATH (souvent déjà /usr/lib/rstudio-server/bin/rserver)
 # Vérification (optionnelle, pour debug)
