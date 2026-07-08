@@ -1,6 +1,19 @@
 #!/bin/bash
 set -e
 
+PATH'=/srv/conda/envs/notebook/bin:$PATH
+R_HOME=/srv/conda/envs/notebook/lib/R
+
+# S'assurer que rserver est dans le PATH (souvent déjà /usr/lib/rstudio-server/bin/rserver)
+# Vérification (optionnelle, pour debug)
+#if ! command -v rserver &> /dev/null; then
+    # chemin typique avec rstudio-server .deb
+#    export PATH="/usr/lib/rstudio-server/bin:$PATH"
+#fi
+
+# Optionnel : vérifier que rserver est bien trouvable
+command -v rserver || { echo "rserver introuvable, problème d'installation RStudio"; exit 1; }
+
 # Juste s'assurer que le kernel R est bien enregistré
 R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
 
