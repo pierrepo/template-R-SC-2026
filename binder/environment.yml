@@ -1,4 +1,7 @@
-name: plasmabio-template-r
+name: template-R-SC-2026
+# adapté de plasmabio-template-r, avec modifs de L3BioSciences-BioAnalyses-R, dernier env à avoir Rstudio sur uracile après maj Plasma
+# 08/07/2026
+
 channels:
   - conda-forge
   - bioconda
@@ -9,16 +12,24 @@ dependencies:
   - jupyterlab>=4.4,<5
   - notebook>=7.4,<8
   - jupyter-resource-usage>=1,<2
-  - jupyterlab-topbar-text >=1.1.0,<2
+  - jupyterlab-topbar-text >=1.1.0,<2     # affiche le nom de l'environnement à droite dans la topbar
   - nodejs>=20
-  # Python environment
-  - python>=3.10,<3.13
-  - pip
+  - nbresuse
+  - libgomp
+  
   # Jupyter archive
   # https://github.com/jupyterlab-contrib/jupyter-archive
   - jupyter-archive
-  # R environment
-  - r-irkernel
-  - r-base>=4
-  - r-tidyverse
-  - r-markdown
+  
+  # Python environment
+  - python>=3.10,<3.13
+  - pip
+  - pip:
+    - watermark
+
+  # R environment (version for Ubuntu 24.04)
+  - r-irkernel>1.3
+  - r-base>=4.3
+  - r-essentials
+  #- r-tidyverse
+  #- r-markdown
