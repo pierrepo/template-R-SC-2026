@@ -1,21 +1,49 @@
 #!/bin/bash
 set -e     # to avoid errors being silently ignored
 
-#export PATH='/srv/conda/envs/notebook/bin:$PATH'
-#export R_HOME='/srv/conda/envs/notebook/lib/R'
+#!/bin/bash
+set -e
 
-# S'assurer que rserver est dans le PATH (souvent déjà /usr/lib/rstudio-server/bin/rserver)
-# Vérification (optionnelle, pour debug)
-#if ! command -v rserver &> /dev/null; then
-    # chemin typique avec rstudio-server .deb
-#    export PATH="/usr/lib/rstudio-server/bin:$PATH"
-#fi
+# 1. Vérifier que rserver existe bien au niveau système
+RSERVER_BIN="/usr/lib/rstudio-server/bin/rserver"
+if [ ! -x "$RSERVER_BIN" ]; then
+    echo "ERREUR : $RSERVER_BIN introuvable ou non exécutable."
+    echo "RStudio Server n'est pas installé dans l'image."
+    exit 1
+fi
 
-# Optionnel : vérifier que rserver est bien trouvable
-#command -v rserver || { echo "rserver introuvable, problème d'installation RStudio"; exit 1; }
+# 2. Créer un symlink dans un répertoire déjà dans PATH de l'environnement conda
+# Sur Plasma, /srv/conda/envs/notebook/bin est généralement dans PATH
+TARGET_LINK="/srv/conda/envs/notebook/bin/rserver"
 
-# Juste s'assurer que le kernel R est bien enregistré
-#R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
+# Supprimer un ancien lien s'il existe
+rm -f "$TARGET_LINK"
+
+ln -s "$RSERVER_BIN" "$TARGET_LINK"
+
+# Vérif immédiate
+if [ ! -x "$TARGET_LINK" ]; then
+    echo "ERREUR : création du lien symbolique vers rserver échouée."
+    exit 1
+fi
+
+# 3. (Optionnel) Configuration rserver.conf pour JupyterHub/Plasma
+RSERVER_CONF="/etc/rstudio/rserver.conf"
+
+if ! grep -q "^auth-none=" "$RSERVER_CONF" 2>/dev/null; then
+    echo "auth-none=1" >> "$RSERVER_CONF"
+fi
+
+if ! grep -q "^www-address=" "$RSERVER_CONF" 2>/dev/null; then
+    echo "www-address=0.0.0.0" >> "$RSERVER_CONF"
+fi
+
+if ! grep -q "^www-frame-origin=" "$RSERVER_CONF" 2>/dev/null; then
+    echo "www-frame-origin=same" >> "$RSERVER_CONF"
+fi
+
+# 4. Enregistrer le kernel R pour cet environnement
+R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
 
 
 # Install Bash kernel
