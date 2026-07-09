@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e     # to avoid errors being silently ignored
 
-# 1. Vérifier que rserver existe bien au niveau système
+# 1. Lien vers rserver (pour RStudio)
+# Vérifie que rserver existe bien au niveau système
 RSERVER_BIN="/usr/lib/rstudio-server/bin/rserver"
 if [ ! -x "$RSERVER_BIN" ]; then
     echo "ERREUR : $RSERVER_BIN introuvable ou non exécutable."
@@ -9,37 +10,21 @@ if [ ! -x "$RSERVER_BIN" ]; then
     exit 1
 fi
 
-# 2. Créer un symlink dans un répertoire déjà dans PATH de l'environnement conda
-# Sur Plasma, /srv/conda/envs/notebook/bin est généralement dans PATH
+# Création d'un symlink dans PATH de l'environnement conda
 TARGET_LINK="/srv/conda/envs/notebook/bin/rserver"
-
-# Supprimer un ancien lien s'il existe
-rm -f "$TARGET_LINK"
-
+rm -f "$TARGET_LINK"   # Supprime un ancien lien s'il existe
 ln -s "$RSERVER_BIN" "$TARGET_LINK"
 
-# Vérif immédiate
+# Vérification immédiate
 if [ ! -x "$TARGET_LINK" ]; then
     echo "ERREUR : création du lien symbolique vers rserver échouée."
     exit 1
 fi
 
-# 3. (Optionnel) Configuration rserver.conf pour JupyterHub/Plasma
-#RSERVER_CONF="/etc/rstudio/rserver.conf"
+# 2. Activation de l'extension jupyter_rsession_proxy
+jupyter server extension enable jupyter_rsession_proxy || true
 
-#if ! grep -q "^auth-none=" "$RSERVER_CONF" 2>/dev/null; then
- #   echo "auth-none=1" >> "$RSERVER_CONF"
-#fi
-
-#if ! grep -q "^www-address=" "$RSERVER_CONF" 2>/dev/null; then
-#    echo "www-address=0.0.0.0" >> "$RSERVER_CONF"
-#fi
-
-#if ! grep -q "^www-frame-origin=" "$RSERVER_CONF" 2>/dev/null; then
-#    echo "www-frame-origin=same" >> "$RSERVER_CONF"
-#fi
-
-# 4. Enregistrer le kernel R pour cet environnement
+# 3. Enregistrer le kernel R pour cet environnement
 R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
 
 
