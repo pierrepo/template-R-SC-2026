@@ -1,43 +1,43 @@
 #!/bin/bash
-set -e     # to avoid errors being silently ignored
+#set -e     # to avoid errors being silently ignored
 
 
 # Chemins explicites
-NOTEBOOK_ENV="/srv/conda/envs/notebook"
-PIP="$NOTEBOOK_ENV/bin/pip"
-JUPYTER="$NOTEBOOK_ENV/bin/jupyter"
+#NOTEBOOK_ENV="/srv/conda/envs/notebook"
+#PIP="$NOTEBOOK_ENV/bin/pip"
+#JUPYTER="$NOTEBOOK_ENV/bin/jupyter"
 
 
 # 1. (Re)installer jupyter-rsession-proxy dans le bon environnement
 # (optionnel si vous êtes sûr qu'il y est déjà, mais ça sécurise)
-"$PIP" install --no-cache-dir --upgrade 'jupyter-rsession-proxy==2.5.0'
+#"$PIP" install --no-cache-dir --upgrade 'jupyter-rsession-proxy'
 
 # 2. Activer l'extension avec le bon jupyter
-"$JUPYTER" server extension enable jupyter_rsession_proxy || \
-"$JUPYTER" serverextension enable --py jupyter_rsession_proxy || true
+#"$JUPYTER" server extension enable jupyter_rsession_proxy || \
+#"$JUPYTER" serverextension enable --py jupyter_rsession_proxy || true
 
 # 3. Lien vers rserver (pour RStudio)
 # Vérifie que rserver existe bien au niveau système
-RSERVER_BIN="/usr/lib/rstudio-server/bin/rserver"
-if [ ! -x "$RSERVER_BIN" ]; then
-    echo "ERREUR : $RSERVER_BIN introuvable ou non exécutable."
-    echo "RStudio Server n'est pas installé dans l'image."
-    exit 1
-fi
+#RSERVER_BIN="/usr/lib/rstudio-server/bin/rserver"
+#if [ ! -x "$RSERVER_BIN" ]; then
+#    echo "ERREUR : $RSERVER_BIN introuvable ou non exécutable."
+#    echo "RStudio Server n'est pas installé dans l'image."
+#    exit 1
+#fi
 
 # Création d'un symlink dans PATH de l'environnement conda
-TARGET_LINK="/srv/conda/envs/notebook/bin/rserver"
-rm -f "$TARGET_LINK"   # Supprime un ancien lien s'il existe
-ln -s "$RSERVER_BIN" "$TARGET_LINK"
+#TARGET_LINK="/srv/conda/envs/notebook/bin/rserver"
+#rm -f "$TARGET_LINK"   # Supprime un ancien lien s'il existe
+#ln -s "$RSERVER_BIN" "$TARGET_LINK"
 
 # Vérification immédiate
-if [ ! -x "$TARGET_LINK" ]; then
-    echo "ERREUR : création du lien symbolique vers rserver échouée."
-    exit 1
-fi
+#if [ ! -x "$TARGET_LINK" ]; then
+#    echo "ERREUR : création du lien symbolique vers rserver échouée."
+#    exit 1
+#fi
 
 # Activation de l'extension jupyter_rsession_proxy
-jupyter server extension enable jupyter_rsession_proxy || true
+#jupyter server extension enable jupyter_rsession_proxy || true
 
 # 3. Enregistrer le kernel R pour cet environnement
 R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
