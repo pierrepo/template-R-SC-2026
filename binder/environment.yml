@@ -33,7 +33,7 @@ dependencies:
 
   # RStudio proxy (nécessaire pour afficher RStudio dans JupyterLab)
   - jupyter-rsession-proxy
-  - jupyter-shiny-proxy
+  #- jupyter-shiny-proxy
 
   # R packages
   - r-essentials                   # inclut tidyverse
