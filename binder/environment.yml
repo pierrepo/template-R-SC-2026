@@ -30,8 +30,12 @@ dependencies:
   # R environment (version for Ubuntu 24.04)
   - r-irkernel>1.3
   - r-base>=4.4
-  - r-rstudio-desktop
+
+  # RStudio proxy (nécessaire pour afficher RStudio dans JupyterLab)
+  - jupyter-rsession-proxy
+
+  # R packages
   - r-essentials                   # inclut tidyverse
-                                   #- r-tidyverse          
+                                          
   # - r-markdown
   
