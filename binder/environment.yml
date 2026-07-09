@@ -29,8 +29,9 @@ dependencies:
 
   # R environment (version for Ubuntu 24.04)
   - r-irkernel>1.3
-  #- r-base>=4.3
-  #- r-essentials                   # inclut tidyverse
+  - r-base>=4.4
+  - r-rstudio-desktop
+  - r-essentials                   # inclut tidyverse
                                    #- r-tidyverse          
   # - r-markdown
   
