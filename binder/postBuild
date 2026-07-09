@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -e     # to avoid errors being silently ignored
 
 #export PATH='/srv/conda/envs/notebook/bin:$PATH'
 #export R_HOME='/srv/conda/envs/notebook/lib/R'
@@ -21,7 +21,7 @@ set -e
 # Install Bash kernel
 # python -m bash_kernel.install --sys-prefix
 
-# Install R package
+# Install R packages
 # if not available as conda package
 # R -e "install.packages('diagram', repos='http://cran.rstudio.com/')"
 
