@@ -11,7 +11,7 @@ dependencies:
   - jupyterhub=3.1.1
   - jupyterlab=3.6.3
   - notebook=6.5.6
-  - jupyter-server=1.23.2
+  - jupyter-server
   - jupyter-server-proxy=4.0.0
   - jupyter-resource-usage
   - jupyterlab-topbar-text    # affiche le nom de l'environnement à droite dans la topbar
