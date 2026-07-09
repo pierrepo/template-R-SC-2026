@@ -1,6 +1,4 @@
 name: template-R-SC-2026
-# adapté de plasmabio-template-r, avec modifs de L3BioSciences-BioAnalyses-R, dernier env à avoir Rstudio sur uracile après maj Plasma
-# 09/07/2026
 
 channels:
   - conda-forge
@@ -8,35 +6,30 @@ channels:
   - nodefaults
 dependencies:
   # Jupyter dependencies
-  - jupyterhub=3.1.1
-  - jupyterlab=3.6.3
-  - notebook=6.5.6
-  - jupyter_server>=1.20.0
-  - jupyter-server-proxy>=4.0.0
-  - jupyter-resource-usage
-  - jupyterlab-topbar-text    # affiche le nom de l'environnement à droite dans la topbar
-  - nodejs
-  - nbresuse
-  - libgomp
-  
-  # Jupyter archive
-  # https://github.com/jupyterlab-contrib/jupyter-archive
-  - jupyter-archive
-
-  # RStudio proxy (nécessaire pour afficher RStudio dans JupyterLab)
-  - jupyter-rsession-proxy>=2.3.0     
+  - jupyterlab>=4.6
+  - jupyter-rsession-proxy  
   
   # Python environment
-  - python=3.10
+  - python>=3.13
   - pip
   - pip:
     - watermark
 
-  # R environment (version for Ubuntu 24.04)
+  # R environment
+  - rstudio-desktop
   - r-irkernel
   - r-base
-
-  # R packages
-  - r-essentials                   # inclut tidyverse                                       
-  # - r-markdown
+  - r-essentials
   
+  # For the M2 RNAseq course:
+  - fastqc
+  - fastp
+  - fastq-screen
+  - samtools
+  - multiqc
+  - qualimap
+  - bedtools
+  - htseq
+  - star
+  - subread
+  - salmon
