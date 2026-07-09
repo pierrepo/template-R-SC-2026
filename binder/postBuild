@@ -37,7 +37,7 @@ if [ ! -x "$TARGET_LINK" ]; then
 fi
 
 # Activation de l'extension jupyter_rsession_proxy
-#jupyter server extension enable jupyter_rsession_proxy || true
+jupyter server extension enable jupyter_rsession_proxy || true
 
 # 3. Enregistrer le kernel R pour cet environnement
 R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
