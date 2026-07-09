@@ -1,7 +1,22 @@
 #!/bin/bash
 set -e     # to avoid errors being silently ignored
 
-# 1. Lien vers rserver (pour RStudio)
+
+# Chemins explicites
+NOTEBOOK_ENV="/srv/conda/envs/notebook"
+PIP="$NOTEBOOK_ENV/bin/pip"
+JUPYTER="$NOTEBOOK_ENV/bin/jupyter"
+
+
+# 1. (Re)installer jupyter-rsession-proxy dans le bon environnement
+# (optionnel si vous êtes sûr qu'il y est déjà, mais ça sécurise)
+"$PIP" install --no-cache-dir --upgrade 'jupyter-rsession-proxy==2.3.0'
+
+# 2. Activer l'extension avec le bon jupyter
+"$JUPYTER" server extension enable jupyter_rsession_proxy || \
+"$JUPYTER" serverextension enable --py jupyter_rsession_proxy || true
+
+# 3. Lien vers rserver (pour RStudio)
 # Vérifie que rserver existe bien au niveau système
 RSERVER_BIN="/usr/lib/rstudio-server/bin/rserver"
 if [ ! -x "$RSERVER_BIN" ]; then
@@ -21,8 +36,8 @@ if [ ! -x "$TARGET_LINK" ]; then
     exit 1
 fi
 
-# 2. Activation de l'extension jupyter_rsession_proxy
-jupyter server extension enable jupyter_rsession_proxy || true
+# Activation de l'extension jupyter_rsession_proxy
+#jupyter server extension enable jupyter_rsession_proxy || true
 
 # 3. Enregistrer le kernel R pour cet environnement
 R --quiet -e "IRkernel::installspec(prefix='/srv/conda/envs/notebook')" || true
